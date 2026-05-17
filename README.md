@@ -71,6 +71,22 @@ Alternatively, you can also open your browser dev tools and look for URLs that b
 ---
 
 
+## Compatibility with ad blockers
+
+This extension detects ads by observing Hotstar's `ct_impression` tracking pixel. If you have another ad or tracker blocker installed (uBlock Origin, AdBlock Plus, Privacy Badger, Brave Shields, etc.), it will almost certainly block that pixel — and this extension never sees it, so the mute never fires. The tell-tale sign is `net::ERR_BLOCKED_BY_CLIENT` against `bifrost-api.hotstar.com/v1/events/track/ct_impression` in the Hotstar tab's DevTools console.
+
+Two ways to fix:
+
+**Option 1 — Allowlist the pixel in uBlock Origin (recommended):** open uBlock's **Dashboard** → **My filters** tab → paste this on its own line, then click **Apply changes**:
+
+    @@||bifrost-api.hotstar.com/v1/events/track/ct_impression
+
+This lets uBlock keep blocking everything else on Hotstar; only the pixel this extension needs is allowed through.
+
+**Option 2 — Disable uBlock on hotstar.com only:** click the uBlock icon on the Hotstar tab and press the big power button so it turns grey for this site. uBlock stays active everywhere else.
+
+For other blockers, the equivalent move is to either allowlist the same URL or disable blocking on `hotstar.com`.
+
 ## Caveats
 - Sometimes broadcasters try to squeeze in one more ad before the next over begins. If the ad gets cut short abruptly, the live action may stay muted for a few extra seconds before the extension unmutes the tab
 - This extension may break if Hotstar change their current tracking pixel URLs or change the format or keywords used in their ad identifiers
